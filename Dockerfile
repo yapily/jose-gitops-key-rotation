@@ -36,10 +36,10 @@ RUN cd -
 
 
 # Copy scripts
-COPY services/keyrotationjob/rotateKeys.sh /job/
+COPY rotateKeys.sh /job/
 RUN chmod +x /job/rotateKeys.sh
 
-COPY services/keyrotationjob/add-ssh-key.sh /job/
+COPY add-ssh-key.sh /job/
 RUN chmod +x /job/add-ssh-key.sh
 
 # Prepare the ssh directory for the ssh keys
