@@ -36,11 +36,9 @@ RUN cd -
 
 
 # Copy scripts
-COPY services/keyrotationjob/rotateKeys* /job/
-RUN chmod +x /job/rotateKeys*
+COPY services/keyrotationjob/rotateKeys.sh /job/
+RUN chmod +x /job/rotateKeys.sh
 
-COPY services/keyrotationjob/.sops.yaml /job/
-COPY services/keyrotationjob/secret.yaml /job/
 COPY services/keyrotationjob/add-ssh-key.sh /job/
 RUN chmod +x /job/add-ssh-key.sh
 
