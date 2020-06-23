@@ -34,9 +34,9 @@ cd ${GIT_SECRET_FOLDER}
 sops -d ${SOPS_SECRET_ENC_YAML_FILENAME} > secret.yaml
 
 ## Replace the old keys as base64 with the new keys as base64
-sed "s/${VALID_KEYS_BEFORE}/${VALID_KEYS_NEW}/g" secret.yaml > tmpfile && mv tmpfile secret.yaml
-sed "s/${EXPIRED_KEYS_BEFORE}/${EXPIRED_KEYS_NEW}/g" secret.yaml > tmpfile && mv tmpfile secret.yaml
-sed "s/${REVOKED_KEYS_BEFORE}/${REVOKED_KEYS_NEW}/g" secret.yaml > tmpfile && mv tmpfile secret.yaml
+sed "s/valid-keys: ${VALID_KEYS_BEFORE}/valid-keys: ${VALID_KEYS_NEW}/g" secret.yaml > tmpfile && mv tmpfile secret.yaml
+sed "s/expired-keys: ${EXPIRED_KEYS_BEFORE}/expired-keys: ${EXPIRED_KEYS_NEW}/g" secret.yaml > tmpfile && mv tmpfile secret.yaml
+sed "s/revoked-keys: ${REVOKED_KEYS_BEFORE}/revoked-keys: ${REVOKED_KEYS_NEW}/g" secret.yaml > tmpfile && mv tmpfile secret.yaml
 
 ## Re-encrypt the secrets
 sops -e secret.yaml > ${SOPS_SECRET_ENC_YAML_FILENAME}
