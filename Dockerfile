@@ -3,6 +3,7 @@ FROM qcastel/docker-graalvm-mvn:0.1
 WORKDIR /tmp
 
 # Install essential packages
+RUN apt-get update
 RUN apt-get install -y python curl git ssh vim wget zip
 
 # Install gcloud
