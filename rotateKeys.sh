@@ -8,7 +8,7 @@ EXPIRED_KEYS_BEFORE=$(cat /keys/expired-keys.json | base64 --wrap=0)
 REVOKED_KEYS_BEFORE=$(cat /keys/revoked-keys.json | base64 --wrap=0)
 
 ## Rotate the keys
-jose jwks-sets rotate -k /keys -o /tmp/keys
+jose jwks-sets rotate -k /keys -o /tmp/keys $JOSE_CLI_OPTIONS
 
 ## The new base64 values we need to replace in the secret
 VALID_KEYS_NEW=$(cat /tmp/keys/valid-keys.json | base64 --wrap=0)
