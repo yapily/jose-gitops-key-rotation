@@ -56,12 +56,14 @@ fi
 
 # Restarting deployments using the keys *
 # * Due to https://github.com/kubernetes/kubernetes/issues/29761, we will need to restart the deployments using the secret
-DEPLOYMENTS_TO_RESTART=$(kubectl get deployment  -l listener=${META_KEY_ROTATION_LISTENER} --template '{{range .items}}{{.metadata.name}}{{" "}}{{end}}' "${NAMESPACES_FILTER}")
-if [ -z "${DEPLOYMENTS_TO_RESTART}" ]; then
+DEPLOYMENTS_TO_RESTART=$(kubectl get deployment  -l listener=${META_KEY_ROTATION_LISTENER} --template '{{range .items}}{{.metadata.name}}{{" "}}{{.metadata.namespace}}{{"\n"}}{{end}}' "${NAMESPACES_FILTER}")
+if [ -z "${DEPLOYMENTS_TO_RESTART:-}" ]; then
   echo "No deployment listening to '${META_KEY_ROTATION_LISTENER}'"
 else
-  echo "Deployments to restart: '${DEPLOYMENTS_TO_RESTART}'"
   # Lets give a bit of time for argoCD to deploy
   sleep 5m
-  kubectl rollout restart deployment ${DEPLOYMENTS_TO_RESTART} $NAMESPACES_FILTER
+  for deploy ns in $(echo "$DEPLOYMENTS_TO_RESTART") ; do
+    echo "Deployments to restart: $deploy in namespace $ns"
+    kubectl rollout restart deployment ${deploy} -n $ns
+  done
 fi
