@@ -60,8 +60,8 @@ DEPLOYMENTS_TO_RESTART=$(kubectl get deployment  -l listener=${META_KEY_ROTATION
 if [ -z "${DEPLOYMENTS_TO_RESTART}" ]; then
   echo "No deployment listening to '${META_KEY_ROTATION_LISTENER}'"
 else
-  echo "Deployments to restart in namespace ${NAMESPACE}: '${DEPLOYMENTS_TO_RESTART}'"
+  echo "Deployments to restart: '${DEPLOYMENTS_TO_RESTART}'"
   # Lets give a bit of time for argoCD to deploy
   sleep 5m
-  kubectl rollout restart deployment ${DEPLOYMENTS_TO_RESTART} -n "${NAMESPACE}"
+  kubectl rollout restart deployment ${DEPLOYMENTS_TO_RESTART} $NAMESPACES_FILTER
 fi
