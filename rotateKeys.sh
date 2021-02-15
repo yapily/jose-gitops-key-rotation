@@ -46,10 +46,17 @@ git add ${SOPS_SECRET_ENC_YAML_FILENAME}
 git commit -m "${GIT_COMMIT_MESSAGE}"
 git push origin master
 
+if [[ -z "${NAMESPACE}" ]]; then
+    echo "No specific namespace to filter"
+    NAMESPACES_FILTER="--all-namespaces"
+else
+    echo "Filter for namespace ${NAMESPACE}"
+    NAMESPACES_FILTER="-n ${NAMESPACE}"
+fi
 
 # Restarting deployments using the keys *
 # * Due to https://github.com/kubernetes/kubernetes/issues/29761, we will need to restart the deployments using the secret
-DEPLOYMENTS_TO_RESTART=$(kubectl get deployment  -l listener=${META_KEY_ROTATION_LISTENER} --template '{{range .items}}{{.metadata.name}}{{" "}}{{end}}' -n "${NAMESPACE}")
+DEPLOYMENTS_TO_RESTART=$(kubectl get deployment  -l listener=${META_KEY_ROTATION_LISTENER} --template '{{range .items}}{{.metadata.name}}{{" "}}{{end}}' "${NAMESPACES_FILTER}")
 if [ -z "${DEPLOYMENTS_TO_RESTART}" ]; then
   echo "No deployment listening to '${META_KEY_ROTATION_LISTENER}'"
 else
