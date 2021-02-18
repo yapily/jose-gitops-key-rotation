@@ -62,7 +62,7 @@ if [ -z "${DEPLOYMENTS_TO_RESTART:-}" ]; then
 else
   # Lets give a bit of time for argoCD to deploy
   sleep 5m
-  for deploy ns in $(echo "$DEPLOYMENTS_TO_RESTART") ; do
+  echo "$DEPLOYMENTS_TO_RESTART" | while read deploy ns ; do
     echo "Deployments to restart: $deploy in namespace $ns"
     kubectl rollout restart deployment ${deploy} -n $ns
   done
